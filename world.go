@@ -11,6 +11,7 @@ const (
 type tile struct {
 	glyph rune
 	kind  tileType
+	color int
 }
 
 type world struct {
@@ -21,11 +22,11 @@ type world struct {
 func NewTile(kind tileType) *tile {
 	switch {
 	case kind == floor:
-		return &tile{'.', floor}
+		return &tile{'.', floor, 0x7}
 	case kind == wall:
-		return &tile{'#', wall}
+		return &tile{'#', wall, 0x55}
 	}
-	return &tile{'X', boundary}
+	return &tile{'X', boundary, 0x91}
 }
 
 func NewWorld(width, height int) *world {

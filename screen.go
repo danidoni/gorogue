@@ -7,19 +7,19 @@ import (
 
 type basicScreen struct{}
 
-func (s basicScreen) Write(x, y int, message string) {
+func (s basicScreen) Write(x, y int, message string, fg, bg termbox.Attribute) {
 	for _, c := range message {
-		termbox.SetCell(x, y, c, termbox.ColorWhite, termbox.ColorBlack)
+		termbox.SetCell(x, y, c, fg, bg)
 		x++
 	}
 }
 
 func (s basicScreen) Dump(x, y int, obj interface{}) {
-	s.Write(x, y, fmt.Sprintf("%+v", obj))
+	s.Write(x, y, fmt.Sprintf("%+v", obj), 0, 0)
 }
 
 type ScreenWriter interface {
-	Write(x, y int, message string)
+	Write(x, y int, message string, fg, bg termbox.Attribute)
 	Dump(x, y int, obj interface{})
 }
 
@@ -28,10 +28,10 @@ type welcomeScreen struct {
 }
 
 func (s welcomeScreen) Draw(world *world, viewport *viewport) {
-	s.Write(0, 0, "Welcome to gorogue v0.0!")
-	s.Write(0, 1, "Press space to go to the play screen.")
-	s.Write(0, 2, "Press i to launch a dialog.")
-	s.Write(0, 3, "Press q to exit.")
+	s.Write(0, 0, "Welcome to gorogue v0.0!", 0, 0)
+	s.Write(0, 1, "Press space to go to the play screen.", 0, 0)
+	s.Write(0, 2, "Press i to launch a dialog.", 0, 0)
+	s.Write(0, 3, "Press q to exit.", 0, 0)
 }
 
 func (s welcomeScreen) Input(game *game, event termbox.Event) []Drawable {
@@ -60,7 +60,7 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 		for c := range cells[r] {
 			termbox.SetCell(c, r,
 				cells[r][c].glyph,
-				termbox.ColorWhite,
+				termbox.Attribute(cells[r][c].color),
 				termbox.ColorBlack)
 		}
 	}
@@ -94,8 +94,16 @@ type dialogScreen struct {
 }
 
 func (s dialogScreen) Draw(world *world, viewport *viewport) {
-	s.Write(0, 0, "This is a dialog")
-	s.Write(0, 1, "Press q to go back.")
+	s.Write(0, 0, "This is a palette dialog", 0, 0)
+	s.Write(0, 1, "Press q to go back.", 0, 0)
+	var color termbox.Attribute = 0x00
+	for x := 0; x < 24; x++{
+		for y := 0; y < 9; y++ {
+			s.Write(15*y, 3+x, fmt.Sprintf("%#x", color), 0, 0)
+			s.Write(15*y+5, 3+x, "   ", 0, color)
+			color++
+		}
+	}
 }
 
 func (s dialogScreen) Input(game *game, event termbox.Event) []Drawable {

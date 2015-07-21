@@ -9,6 +9,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	termbox.SetOutputMode(termbox.Output216)
 	defer termbox.Close()
 	termbox.HideCursor()
 	termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
