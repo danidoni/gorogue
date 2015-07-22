@@ -6,16 +6,56 @@ import (
 
 func RandomWorld(width, height int) *world {
 	world := &world{width: width, height: height}
-	world.cells = make([][]*tile, height)
-	for r := range world.cells {
-		world.cells[r] = make([]*tile, width)
-		for c := range world.cells[r] {
+	world.cells = RandomCave(height, width)
+
+	for i := 0; i < 8; i++ {
+		SmoothCave(world)
+	}
+
+	return world
+}
+
+func RandomCave(height, width int) [][]*tile {
+	cells := make([][]*tile, height)
+	for row := range cells {
+		cells[row] = make([]*tile, width)
+		for col := range cells[row] {
 			if rand.Float32() < 0.5 {
-				world.cells[r][c] = NewTile(floor)
+				cells[row][col] = NewTile(floor)
 			} else {
-				world.cells[r][c] = NewTile(wall)
+				cells[row][col] = NewTile(wall)
 			}
 		}
 	}
-	return world
+
+	return cells
+}
+
+func SmoothCave(world *world) {
+	var smoothedCells [][]*tile = make([][]*tile, world.height)
+
+	for row := range world.cells {
+		smoothedCells[row] = make([]*tile, world.width)
+		for col := range world.cells[row] {
+			floors := 0
+			walls := 0
+
+			for y := -1; y < 2; y++ {
+				for x := -1; x < 2; x++ {
+					if world.GetTile(x+col, y+row).kind == floor {
+						floors++
+					} else {
+						walls++
+					}
+				}
+			}
+
+			if floors >= walls {
+				smoothedCells[row][col] = NewTile(floor)
+			} else {
+				smoothedCells[row][col] = NewTile(wall)
+			}
+		}
+	}
+	world.cells = smoothedCells
 }

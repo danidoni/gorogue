@@ -82,6 +82,8 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	case event.Ch == 'l':
 		viewport.Move(right, 1, world)
 		return []Drawable{playScreen{}}
+	case event.Ch == 's':
+		SmoothCave(world)
 	}
 	return []Drawable{playScreen{}}
 }
