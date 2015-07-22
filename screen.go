@@ -52,15 +52,12 @@ type playScreen struct {
 }
 
 func (s playScreen) Draw(world *world, viewport *viewport) {
-	cells := world.Viewport(viewport.x,
-		viewport.y,
-		viewport.width,
-		viewport.height)
-	for r := range cells {
-		for c := range cells[r] {
-			termbox.SetCell(c, r,
-				cells[r][c].glyph,
-				termbox.Attribute(cells[r][c].color),
+	for y := 0; y < viewport.height; y++ {
+		for x := 0; x < viewport.width; x++ {
+			tile := viewport.GetTile(x, y)
+			termbox.SetCell(x, y,
+				tile.glyph,
+				termbox.Attribute(tile.color),
 				termbox.ColorBlack)
 		}
 	}
