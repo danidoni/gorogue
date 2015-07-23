@@ -6,6 +6,13 @@ type viewport struct {
 	world         *world
 }
 
+func centeredViewport(centeredX, centeredY, width, height int, world *world) *viewport {
+	x := centeredX - width/2
+	y := centeredY - height/2
+	return &viewport{x, y, width, height, world}
+}
+
+// TODO; Make private
 func (v *viewport) GetTile(viewportX, viewportY int) *tile {
 	worldY := v.y + viewportY
 	worldX := v.x + viewportX
@@ -28,6 +35,7 @@ func (v *viewport) GetTile(viewportX, viewportY int) *tile {
 	return v.world.GetTile(worldX, worldY)
 }
 
+// TODO: Make private
 func (v *viewport) Move(direction direction, step int, w *world) {
 	switch {
 	case direction == left:

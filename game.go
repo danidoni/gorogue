@@ -24,7 +24,7 @@ func NewGame() *game {
 	screens.Push(welcomeScreen{})
 	width, height := termbox.Size()
 	world := NewWorld(250, 100)
-	viewport := &viewport{0, 0, width, height, world}
+	viewport := centeredViewport(0, 0, width, height, world)
 	game := &game{viewport, screens, world}
 	return game
 }
