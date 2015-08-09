@@ -77,13 +77,13 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	case event.Ch == 'q':
 		return []Drawable{welcomeScreen{}}
 	case event.Ch == 'h':
-		player.move(left, 1)
+		player.move(-1, 0)
 	case event.Ch == 'j':
-		player.move(down, 1)
+		player.move(0, 1)
 	case event.Ch == 'k':
-		player.move(up, 1)
+		player.move(0, -1)
 	case event.Ch == 'l':
-		player.move(right, 1)
+		player.move(1, 0)
 	case event.Ch == 's':
 		SmoothCave(world)
 	}
