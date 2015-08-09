@@ -61,30 +61,33 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 				termbox.ColorBlack)
 		}
 	}
+
+	player := world.player
+	playerX, playerY := viewport.worldToViewport(player.x, player.y)
+	termbox.SetCell(playerX, playerY, player.glyph, termbox.Attribute(player.color), 0)
 	s.Dump(0, 0, viewport)
+	s.Dump(0, 1, world.player)
 }
 
 func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	viewport := game.viewport
 	world := game.world
+	player := world.player
 	switch {
 	case event.Ch == 'q':
 		return []Drawable{welcomeScreen{}}
 	case event.Ch == 'h':
-		viewport.Move(left, 1, world)
-		return []Drawable{playScreen{}}
+		player.move(left, 1)
 	case event.Ch == 'j':
-		viewport.Move(down, 1, world)
-		return []Drawable{playScreen{}}
+		player.move(down, 1)
 	case event.Ch == 'k':
-		viewport.Move(up, 1, world)
-		return []Drawable{playScreen{}}
+		player.move(up, 1)
 	case event.Ch == 'l':
-		viewport.Move(right, 1, world)
-		return []Drawable{playScreen{}}
+		player.move(right, 1)
 	case event.Ch == 's':
 		SmoothCave(world)
 	}
+ 	viewport.center(player.x, player.y)
 	return []Drawable{playScreen{}}
 }
 

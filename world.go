@@ -14,9 +14,14 @@ type tile struct {
 	color int
 }
 
+func (t tile) isWalkable() bool {
+	return t.kind == floor
+}
+
 type world struct {
 	width, height int
 	cells         [][]*tile
+	player        *player
 }
 
 func NewTile(kind tileType) *tile {

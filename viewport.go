@@ -7,15 +7,31 @@ type viewport struct {
 }
 
 func centeredViewport(centeredX, centeredY, width, height int, world *world) *viewport {
-	x := centeredX - width/2
-	y := centeredY - height/2
-	return &viewport{x, y, width, height, world}
+	v := &viewport{width: width, height: height, world: world}
+	v.center(centeredX, centeredY)
+	return v
+}
+
+func (v *viewport) viewportToWorld(viewportX, viewportY int) (worldX, worldY int) {
+	worldX = v.x + viewportX
+	worldY = v.y + viewportY
+	return
+}
+
+func (v *viewport) worldToViewport(worldX, worldY int) (viewportX, viewportY int) {
+	viewportX = worldX - v.x
+	viewportY = worldY - v.y
+	return
+}
+
+func (v *viewport) center(centeredX, centeredY int) {
+	v.x = centeredX - v.width/2
+	v.y = centeredY - v.height/2
 }
 
 // TODO; Make private
 func (v *viewport) GetTile(viewportX, viewportY int) *tile {
-	worldY := v.y + viewportY
-	worldX := v.x + viewportX
+	worldX, worldY := v.viewportToWorld(viewportX, viewportY)
 
 	switch {
 	case viewportX < 0:
