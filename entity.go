@@ -24,8 +24,13 @@ func newPlayer(world *world) *player {
 }
 
 func (p *player) move(offsetX, offsetY int) {
-	if p.world.GetTile(p.x + offsetX, p.y + offsetY).isWalkable() {
-		p.x += offsetX
-		p.y += offsetY
+	newX := p.x + offsetX
+	newY := p.y + offsetY
+	tile := p.world.GetTile(newX, newY)
+	if tile.isWalkable() {
+		p.x = newX
+		p.y = newY
+	} else if tile.isDiggable() {
+		p.world.dig(newX, newY)
 	}
 }
