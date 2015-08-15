@@ -32,12 +32,20 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 		return []Drawable{welcomeScreen{}}
 	case event.Ch == 'h':
 		player.move(-1, 0)
-	case event.Ch == 'j':
-		player.move(0, 1)
+	case event.Ch == 'y':
+		player.move(-1, -1)
 	case event.Ch == 'k':
 		player.move(0, -1)
+	case event.Ch == 'u':
+		player.move(1, -1)
 	case event.Ch == 'l':
 		player.move(1, 0)
+	case event.Ch == 'n':
+		player.move(1, 1)
+	case event.Ch == 'j':
+		player.move(0, 1)
+	case event.Ch == 'b':
+		player.move(-1, 1)
 	case event.Ch == 's':
 		SmoothCave(world)
 	}
