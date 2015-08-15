@@ -68,3 +68,12 @@ func (v *viewport) Move(direction direction, step int, w *world) {
 		v.y = updatedY
 	}
 }
+
+func (v *viewport) iterate(callback func(x, y int, tile *tile)) {
+	for y := 0; y < v.height; y++ {
+		for x := 0; x < v.width; x++ {
+			tile := v.GetTile(x, y)
+			callback(x, y, tile)
+		}
+	}
+}

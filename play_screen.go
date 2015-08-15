@@ -9,15 +9,12 @@ type playScreen struct {
 }
 
 func (s playScreen) Draw(world *world, viewport *viewport) {
-	for y := 0; y < viewport.height; y++ {
-		for x := 0; x < viewport.width; x++ {
-			tile := viewport.GetTile(x, y)
-			termbox.SetCell(x, y,
-				tile.glyph,
-				termbox.Attribute(tile.color),
-				termbox.ColorBlack)
-		}
-	}
+	viewport.iterate(func(x, y int, tile *tile) {
+		termbox.SetCell(x, y,
+			tile.glyph,
+			termbox.Attribute(tile.color),
+			termbox.ColorBlack)
+	})
 
 	player := world.player
 	playerX, playerY := viewport.worldToViewport(player.x, player.y)
