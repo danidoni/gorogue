@@ -1,5 +1,9 @@
 package main
 
+import (
+	"container/list"
+)
+
 type tileType int
 
 const (
@@ -26,6 +30,7 @@ type world struct {
 	width, height int
 	cells         [][]*tile
 	player        *player
+	entities      *list.List
 }
 
 func NewTile(kind tileType) *tile {
@@ -71,4 +76,17 @@ func (w *world) SetTile(x, y int, tile *tile) {
 
 func (w *world) dig(x, y int) {
 	w.SetTile(x, y, NewTile(floor))
+}
+
+func (w *world) entitiesInside(x, y, width, height int, callback func(entity renderable)) {
+	for e := w.entities.Front(); e != nil; e = e.Next() {
+		entity := e.Value.(renderable)
+		x, y := entity.Position()
+		if x >= x &&
+			x <= x+width &&
+			y >= y &&
+			y <= y+height {
+			callback(entity)
+		}
+	}
 }

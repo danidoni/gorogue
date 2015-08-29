@@ -16,6 +16,17 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 			termbox.ColorBlack)
 	})
 
+	viewport.entities(func(entity renderable) {
+		x, y := entity.Position()
+		translatedX, translatedY := viewport.worldToViewport(x, y)
+		glyph, color := entity.Avatar()
+		termbox.SetCell(translatedX,
+			translatedY,
+			glyph,
+			termbox.Attribute(color),
+			termbox.ColorBlack)
+	})
+
 	player := world.player
 	playerX, playerY := viewport.worldToViewport(player.x, player.y)
 	termbox.SetCell(playerX, playerY, player.glyph, termbox.Attribute(player.color), 0)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/nsf/termbox-go"
+	"container/list"
 )
 
 type direction int
@@ -27,6 +28,10 @@ func NewGame() *game {
 	player := newPlayer(world)
 	viewport := centeredViewport(player.x, player.y, width, height, world)
 	world.player = player
+	entities := list.New()
+	var entity renderable = newFungus(world)
+	entities.PushBack(entity)
+	world.entities = entities
 	game := &game{viewport, screens, world}
 	return game
 }
