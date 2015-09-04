@@ -1,9 +1,5 @@
 package main
 
-import (
-	"math/rand"
-)
-
 type entity struct {
 	x, y  int
 	glyph rune
@@ -14,7 +10,7 @@ type entity struct {
 type player entity
 
 func newPlayer(world *world) *player {
-	x, y := atWalkableTile(world)
+	x, y := world.atWalkableTile()
 	return &player{x, y, '@', 0, world}
 }
 
@@ -33,7 +29,7 @@ func (p *player) move(offsetX, offsetY int) {
 type fungus entity
 
 func newFungus(world *world) *fungus {
-	x, y := atWalkableTile(world)
+	x, y := world.atWalkableTile()
 	return &fungus{x, y, 'f', 0x4b, world}
 }
 
@@ -45,22 +41,11 @@ func (e fungus) Avatar() (glyph rune, color int) {
 	return e.glyph, e.color
 }
 
-// Finds a random walkable tile in the world
-func atWalkableTile(world *world) (x, y int) {
-	x = rand.Intn(world.width)
-	y = rand.Intn(world.height)
-	for world.GetTile(x, y).isWalkable() == false {
-		x = rand.Intn(world.width)
-		y = rand.Intn(world.height)
-	}
-	return
-}
-
 // Fungus entities don't move, they are stationary creatures
 func (f *fungus) move(offsetX, offsetY int) {
 }
 
-type renderable interface {
+type interactive interface {
 	Position() (int, int)
 	Avatar() (rune, int)
 }

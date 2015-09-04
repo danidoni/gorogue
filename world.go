@@ -2,6 +2,7 @@ package main
 
 import (
 	"container/list"
+	"math/rand"
 )
 
 type tileType int
@@ -78,9 +79,9 @@ func (w *world) dig(x, y int) {
 	w.SetTile(x, y, NewTile(floor))
 }
 
-func (w *world) entitiesInside(x, y, width, height int, callback func(entity renderable)) {
+func (w *world) entitiesInside(x, y, width, height int, callback func(entity interactive)) {
 	for e := w.entities.Front(); e != nil; e = e.Next() {
-		entity := e.Value.(renderable)
+		entity := e.Value.(interactive)
 		x, y := entity.Position()
 		if x >= x &&
 			x <= x+width &&
@@ -89,4 +90,15 @@ func (w *world) entitiesInside(x, y, width, height int, callback func(entity ren
 			callback(entity)
 		}
 	}
+}
+
+// Finds a random walkable tile in the world
+func (w *world) atWalkableTile() (x, y int) {
+	x = rand.Intn(w.width)
+	y = rand.Intn(w.height)
+	for w.GetTile(x, y).isWalkable() == false {
+		x = rand.Intn(w.width)
+		y = rand.Intn(w.height)
+	}
+	return
 }

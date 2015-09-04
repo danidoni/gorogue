@@ -78,6 +78,6 @@ func (v *viewport) iterate(callback func(x, y int, tile *tile)) {
 	}
 }
 
-func (v *viewport) entities(callback func(entity renderable)) {
+func (v *viewport) entities(callback func(entity interactive)) {
 	v.world.entitiesInside(v.x, v.y, v.width, v.height, callback)
 }
