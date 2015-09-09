@@ -61,5 +61,8 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 		SmoothCave(world)
 	}
  	viewport.center(player.x, player.y)
+	for e := world.entities.Front(); e != nil; e = e.Next() {
+		e.Value.(interactive).update()
+	}
 	return []Drawable{playScreen{}}
 }
