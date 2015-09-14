@@ -45,7 +45,16 @@ func NewTile(kind tileType) *tile {
 }
 
 func NewWorld(width, height int) *world {
-	return RandomWorld(width, height)
+	world := &world{width: width, height: height}
+	world.cells = make([][]*tile, world.height)
+	for row := range world.cells {
+		world.cells[row] = make([]*tile, world.width)
+		for col := range world.cells[row] {
+			world.cells[row][col] = NewTile(floor)
+		}
+	}
+	RandomWorld(world)
+	return world
 }
 
 func (w world) isWithinBoundaries(x, y int) bool {

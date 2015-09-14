@@ -4,31 +4,24 @@ import (
 	"math/rand"
 )
 
-func RandomWorld(width, height int) *world {
-	world := &world{width: width, height: height}
-	world.cells = RandomCave(height, width)
+func RandomWorld(world *world) {
+	RandomCave(world)
 
 	for i := 0; i < 8; i++ {
 		SmoothCave(world)
 	}
-
-	return world
 }
 
-func RandomCave(height, width int) [][]*tile {
-	cells := make([][]*tile, height)
-	for row := range cells {
-		cells[row] = make([]*tile, width)
-		for col := range cells[row] {
+func RandomCave(world *world) {
+	for row := range world.cells {
+		for col := range world.cells[row] {
 			if rand.Float32() < 0.5 {
-				cells[row][col] = NewTile(floor)
+				world.cells[row][col] = NewTile(floor)
 			} else {
-				cells[row][col] = NewTile(wall)
+				world.cells[row][col] = NewTile(wall)
 			}
 		}
 	}
-
-	return cells
 }
 
 func SmoothCave(world *world) {
