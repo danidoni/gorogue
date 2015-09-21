@@ -111,3 +111,25 @@ func (w *world) atWalkableTile() (x, y int) {
 	}
 	return
 }
+
+/* Find an entity by coordinates
+ * FIXME: Can be improved by previously indexing entities
+ */
+func (w *world) entityAt(x, y int) interactive {
+	for e := w.entities.Front(); e != nil; e = e.Next() {
+		entity := e.Value.(interactive)
+		entityX, entityY := entity.Position()
+		if entityX == x && entityY == y {
+			return entity
+		}
+	}
+	return nil
+}
+
+func (w *world) removeEntity(entity interactive) {
+	for e := w.entities.Front(); e != nil; e = e.Next() {
+		if entity == e.Value.(interactive) {
+			w.entities.Remove(e)
+		}
+	}
+}

@@ -18,7 +18,10 @@ func (p *player) move(offsetX, offsetY int) {
 	newX := p.x + offsetX
 	newY := p.y + offsetY
 	tile := p.world.GetTile(newX, newY)
-	if tile.isWalkable() {
+	entity := p.world.entityAt(newX, newY)
+	if entity != nil {
+		p.world.removeEntity(entity)
+	} else if tile.isWalkable() {
 		p.x = newX
 		p.y = newY
 	} else if tile.isDiggable() {
