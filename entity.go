@@ -29,7 +29,7 @@ func (p *player) move(offsetX, offsetY int) {
 	}
 }
 
-type interactive interface {
+type autonomous interface {
 	Position() (int, int)
 	Avatar() (rune, int)
 	update()

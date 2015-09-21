@@ -29,7 +29,7 @@ func NewGame() *game {
 	viewport := centeredViewport(player.x, player.y, width, height, world)
 	world.player = player
 	entities := list.New()
-	var entity interactive = newFungus(world)
+	var entity autonomous = newFungus(world)
 	entities.PushBack(entity)
 	world.entities = entities
 	game := &game{viewport, screens, world}

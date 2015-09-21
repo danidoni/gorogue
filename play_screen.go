@@ -16,7 +16,7 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 			termbox.ColorBlack)
 	})
 
-	viewport.entities(func(entity interactive) {
+	viewport.entities(func(entity autonomous) {
 		x, y := entity.Position()
 		translatedX, translatedY := viewport.worldToViewport(x, y)
 		glyph, color := entity.Avatar()
@@ -62,7 +62,7 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	}
  	viewport.center(player.x, player.y)
 	for e := world.entities.Front(); e != nil; e = e.Next() {
-		e.Value.(interactive).update()
+		e.Value.(autonomous).update()
 	}
 	return []Drawable{playScreen{}}
 }

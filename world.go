@@ -88,9 +88,9 @@ func (w *world) dig(x, y int) {
 	w.SetTile(x, y, NewTile(floor))
 }
 
-func (w *world) entitiesInside(x, y, width, height int, callback func(entity interactive)) {
+func (w *world) entitiesInside(x, y, width, height int, callback func(entity autonomous)) {
 	for e := w.entities.Front(); e != nil; e = e.Next() {
-		entity := e.Value.(interactive)
+		entity := e.Value.(autonomous)
 		x, y := entity.Position()
 		if x >= x &&
 			x <= x+width &&
@@ -115,9 +115,9 @@ func (w *world) atWalkableTile() (x, y int) {
 /* Find an entity by coordinates
  * FIXME: Can be improved by previously indexing entities
  */
-func (w *world) entityAt(x, y int) interactive {
+func (w *world) entityAt(x, y int) autonomous {
 	for e := w.entities.Front(); e != nil; e = e.Next() {
-		entity := e.Value.(interactive)
+		entity := e.Value.(autonomous)
 		entityX, entityY := entity.Position()
 		if entityX == x && entityY == y {
 			return entity
@@ -126,9 +126,9 @@ func (w *world) entityAt(x, y int) interactive {
 	return nil
 }
 
-func (w *world) removeEntity(entity interactive) {
+func (w *world) removeEntity(entity autonomous) {
 	for e := w.entities.Front(); e != nil; e = e.Next() {
-		if entity == e.Value.(interactive) {
+		if entity == e.Value.(autonomous) {
 			w.entities.Remove(e)
 		}
 	}
