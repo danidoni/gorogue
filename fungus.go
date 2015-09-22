@@ -5,21 +5,30 @@ import (
 )
 
 type fungus struct {
-	entity *entity
+	entity
 	spreadCount int
 }
 
 func newFungus(world *world) *fungus {
 	x, y := world.atWalkableTile()
-	return &fungus{&entity{x, y, 'f', 0x4b, world}, 0}
+	return &fungus{
+		entity{ x: x,
+			y: y,
+			glyph: 'f',
+			color: 0x4b,
+			world: world,
+			hp: 20,
+			maxHp: 20,
+		},
+		0}
 }
 
 func (e fungus) Position() (x, y int) {
-	return e.entity.x, e.entity.y
+	return e.x, e.y
 }
 
 func (e fungus) Avatar() (glyph rune, color int) {
-	return e.entity.glyph, e.entity.color
+	return e.glyph, e.color
 }
 
 // Fungus entities don't move, they are stationary creatures

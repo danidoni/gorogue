@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/nsf/termbox-go"
+	"fmt"
 )
 
 type playScreen struct {
@@ -30,8 +31,9 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 	player := world.player
 	playerX, playerY := viewport.worldToViewport(player.x, player.y)
 	termbox.SetCell(playerX, playerY, player.glyph, termbox.Attribute(player.color), 0)
-	s.Dump(0, 0, viewport)
-	s.Dump(0, 1, world.player)
+
+	// Dump stats at upper-right corner
+	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", player.Hp(), player.MaxHp()), 0, 0)
 }
 
 func (s playScreen) Input(game *game, event termbox.Event) []Drawable {

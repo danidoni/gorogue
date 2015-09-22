@@ -5,13 +5,41 @@ type entity struct {
 	glyph rune
 	color int
 	world *world
+	hp    int
+	maxHp int
 }
 
-type player entity
+func (e entity) Hp() int {
+	return e.hp
+}
+
+func (e *entity) SetHp(amount int) {
+	e.hp = amount
+}
+
+func (e entity) MaxHp() int {
+	return e.maxHp
+}
+
+func (e *entity) SetMaxHp(value int) {
+	e.maxHp = value
+}
+
+type player struct {
+	entity
+}
 
 func newPlayer(world *world) *player {
 	x, y := world.atWalkableTile()
-	return &player{x, y, '@', 0, world}
+	return &player{entity{
+		x: x,
+		y: y,
+		glyph: '@',
+		color: 0,
+		world: world,
+		hp: 100,
+		maxHp: 100,
+	}}
 }
 
 func (p *player) move(offsetX, offsetY int) {
@@ -33,4 +61,6 @@ type autonomous interface {
 	Position() (int, int)
 	Avatar() (rune, int)
 	update()
+	Hp() int
+	SetHp(value int)
 }
