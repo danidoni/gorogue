@@ -26,7 +26,7 @@ func NewGame() *game {
 	width, height := termbox.Size()
 	world := NewWorld(250, 100)
 	player := newPlayer(world)
-	viewport := centeredViewport(player.x, player.y, width, height, world)
+	viewport := centeredViewport(player.location, width, height, world)
 	world.player = player
 	entities := list.New()
 	var entity autonomous = newFungus(world)

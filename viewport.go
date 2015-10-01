@@ -1,32 +1,32 @@
 package main
 
 type viewport struct {
-	x, y          int
+	origin        *Point
 	width, height int
 	world         *world
 }
 
-func centeredViewport(centeredX, centeredY, width, height int, world *world) *viewport {
+func centeredViewport(center *Point, width, height int, world *world) *viewport {
 	v := &viewport{width: width, height: height, world: world}
-	v.center(centeredX, centeredY)
+	v.center(center.x, center.y)
 	return v
 }
 
 func (v *viewport) viewportToWorld(viewportX, viewportY int) (worldX, worldY int) {
-	worldX = v.x + viewportX
-	worldY = v.y + viewportY
+	worldX = v.origin.x + viewportX
+	worldY = v.origin.y + viewportY
 	return
 }
 
-func (v *viewport) worldToViewport(worldX, worldY int) (viewportX, viewportY int) {
-	viewportX = worldX - v.x
-	viewportY = worldY - v.y
-	return
+func (v *viewport) worldToViewport(coords *Point) *Point {
+	return coords.Sub(v.origin)
 }
 
 func (v *viewport) center(centeredX, centeredY int) {
-	v.x = centeredX - v.width/2
-	v.y = centeredY - v.height/2
+	v.origin = &Point{
+		x: centeredX - v.width/2,
+		y: centeredY - v.height/2,
+	}
 }
 
 // TODO; Make private
@@ -42,30 +42,26 @@ func (v *viewport) GetTile(viewportX, viewportY int) *tile {
 		return NewTile(boundary)
 	case viewportY > v.height:
 		return NewTile(boundary)
-	case worldX > v.world.width:
+	case worldX > v.world.dimensions.x:
 		return NewTile(boundary)
-	case worldY > v.world.height:
+	case worldY > v.world.dimensions.y:
 		return NewTile(boundary)
 	}
 
-	return v.world.GetTile(worldX, worldY)
+	return v.world.GetTile(&Point{x: worldX, y: worldY})
 }
 
 // TODO: Make private
 func (v *viewport) Move(direction direction, step int, w *world) {
 	switch {
 	case direction == left:
-		updatedX := v.x - step
-		v.x = updatedX
+		v.origin = v.origin.Sub(&Point{step, 0})
 	case direction == right:
-		updatedX := v.x + step
-		v.x = updatedX
+		v.origin = v.origin.Add(&Point{step, 0})
 	case direction == up:
-		updatedY := v.y - step
-		v.y = updatedY
+		v.origin = v.origin.Sub(&Point{0, step})
 	case direction == down:
-		updatedY := v.y + step
-		v.y = updatedY
+		v.origin = v.origin.Add(&Point{0, step})
 	}
 }
 
@@ -79,5 +75,5 @@ func (v *viewport) iterate(callback func(x, y int, tile *tile)) {
 }
 
 func (v *viewport) entities(callback func(entity autonomous)) {
-	v.world.entitiesInside(v.x, v.y, v.width, v.height, callback)
+	v.world.entitiesInside(v.origin, v.width, v.height, callback)
 }

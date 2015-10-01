@@ -25,17 +25,21 @@ func RandomCave(world *world) {
 }
 
 func SmoothCave(world *world) {
-	var smoothedCells [][]*tile = make([][]*tile, world.height)
+	var smoothedCells [][]*tile = make([][]*tile, world.dimensions.y)
 
 	for row := range world.cells {
-		smoothedCells[row] = make([]*tile, world.width)
+		smoothedCells[row] = make([]*tile, world.dimensions.x)
 		for col := range world.cells[row] {
 			floors := 0
 			walls := 0
 
 			for y := -1; y < 2; y++ {
 				for x := -1; x < 2; x++ {
-					if world.GetTile(x+col, y+row).kind == floor {
+					point := &Point{
+						x: x+col,
+						y: y+row,
+					}
+					if world.GetTile(point).kind == floor {
 						floors++
 					} else {
 						walls++

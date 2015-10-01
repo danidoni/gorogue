@@ -28,7 +28,7 @@ func (t tile) isDiggable() bool {
 }
 
 type world struct {
-	width, height int
+	dimensions    *Point
 	cells         [][]*tile
 	player        *player
 	entities      *list.List
@@ -45,10 +45,10 @@ func NewTile(kind tileType) *tile {
 }
 
 func NewWorld(width, height int) *world {
-	world := &world{width: width, height: height}
-	world.cells = make([][]*tile, world.height)
+	world := &world{dimensions: &Point{x: width, y: height}}
+	world.cells = make([][]*tile, world.dimensions.y)
 	for row := range world.cells {
-		world.cells[row] = make([]*tile, world.width)
+		world.cells[row] = make([]*tile, world.dimensions.x)
 		for col := range world.cells[row] {
 			world.cells[row][col] = NewTile(floor)
 		}
@@ -57,59 +57,63 @@ func NewWorld(width, height int) *world {
 	return world
 }
 
-func (w world) isWithinBoundaries(x, y int) bool {
+func (w world) isWithinBoundaries(point *Point) bool {
 	switch {
-	case x < 0:
+	case point.x < 0:
 		return false
-	case x >= w.width:
+	case point.x >= w.dimensions.x:
 		return false
-	case y < 0:
+	case point.y < 0:
 		return false
-	case y >= w.height:
+	case point.y >= w.dimensions.y:
 		return false
 	}
 	return true
 }
 
-func (w world) GetTile(x, y int) *tile {
-	if w.isWithinBoundaries(x, y) {
-		return w.cells[y][x]
+func (w world) GetTile(point *Point) *tile {
+	if w.isWithinBoundaries(point) {
+		return w.cells[point.y][point.x]
 	}
 	return NewTile(boundary)
 }
 
-func (w *world) SetTile(x, y int, tile *tile) {
-	if w.isWithinBoundaries(x, y) {
-		w.cells[y][x] = tile
+func (w *world) SetTile(point *Point, tile *tile) {
+	if w.isWithinBoundaries(point) {
+		w.cells[point.y][point.x] = tile
 	}
 }
 
-func (w *world) dig(x, y int) {
-	w.SetTile(x, y, NewTile(floor))
+func (w *world) dig(point *Point) {
+	w.SetTile(point, NewTile(floor))
 }
 
-func (w *world) entitiesInside(x, y, width, height int, callback func(entity autonomous)) {
+func (w *world) entitiesInside(point *Point, width, height int, callback func(entity autonomous)) {
 	for e := w.entities.Front(); e != nil; e = e.Next() {
 		entity := e.Value.(autonomous)
-		x, y := entity.Position()
-		if x >= x &&
-			x <= x+width &&
-			y >= y &&
-			y <= y+height {
+		entityLocation := entity.Position()
+		if entityLocation.x >= point.x &&
+			entityLocation.x <= point.x+width &&
+			entityLocation.y >= point.y &&
+			entityLocation.y <= point.y+height {
 			callback(entity)
 		}
 	}
 }
 
 // Finds a random walkable tile in the world
-func (w *world) atWalkableTile() (x, y int) {
-	x = rand.Intn(w.width)
-	y = rand.Intn(w.height)
-	for w.GetTile(x, y).isWalkable() == false {
-		x = rand.Intn(w.width)
-		y = rand.Intn(w.height)
+func (w *world) atWalkableTile() *Point {
+	point := &Point{
+		x: rand.Intn(w.dimensions.x),
+		y: rand.Intn(w.dimensions.y),
 	}
-	return
+	for w.GetTile(point).isWalkable() == false {
+		point = &Point{
+			x: rand.Intn(w.dimensions.x),
+			y: rand.Intn(w.dimensions.y),
+		}
+	}
+	return point
 }
 
 /* Find an entity by coordinates
@@ -118,8 +122,8 @@ func (w *world) atWalkableTile() (x, y int) {
 func (w *world) entityAt(x, y int) autonomous {
 	for e := w.entities.Front(); e != nil; e = e.Next() {
 		entity := e.Value.(autonomous)
-		entityX, entityY := entity.Position()
-		if entityX == x && entityY == y {
+		position := entity.Position()
+		if position.x == x && position.y == y {
 			return entity
 		}
 	}

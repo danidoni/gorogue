@@ -1,7 +1,7 @@
 package main
 
 type entity struct {
-	x, y  int
+	location *Point
 	glyph rune
 	color int
 	world *world
@@ -26,7 +26,7 @@ func (e *entity) SetMaxHp(value int) {
 }
 
 type autonomous interface {
-	Position() (int, int)
+	Position() *Point
 	Avatar() (rune, int)
 	update()
 	Hp() int

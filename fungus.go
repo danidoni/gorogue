@@ -10,10 +10,10 @@ type fungus struct {
 }
 
 func newFungus(world *world) *fungus {
-	x, y := world.atWalkableTile()
+	point := world.atWalkableTile()
 	return &fungus{
-		entity{ x: x,
-			y: y,
+		entity{
+			location: point,
 			glyph: 'f',
 			color: 0x4b,
 			world: world,
@@ -23,8 +23,8 @@ func newFungus(world *world) *fungus {
 		0}
 }
 
-func (e fungus) Position() (x, y int) {
-	return e.x, e.y
+func (e fungus) Position() *Point {
+	return e.location
 }
 
 func (e fungus) Avatar() (glyph rune, color int) {
@@ -32,7 +32,7 @@ func (e fungus) Avatar() (glyph rune, color int) {
 }
 
 // Fungus entities don't move, they are stationary creatures
-func (f *fungus) move(offsetX, offsetY int) {
+func (f *fungus) move(offset *Point) {
 }
 
 func (f *fungus) update() {
@@ -43,11 +43,17 @@ func (f *fungus) update() {
 
 func (f *fungus) spread() *fungus {
 	child := newFungus(f.entity.world)
-	child.entity.x = f.entity.x + int(rand.Float32() * 11) - 5
-	child.entity.y = f.entity.y + int(rand.Float32() * 11) - 5
-	for f.entity.world.GetTile(child.entity.x, child.entity.y).isWalkable() == false {
-		child.entity.x = f.entity.x + int(rand.Float32() * 11) - 5
-		child.entity.y = f.entity.y + int(rand.Float32() * 11) - 5
+	randomPoint := &Point{
+		x: int(rand.Float32() * 11) - 5,
+		y: int(rand.Float32() * 11) - 5,
+	}
+	child.entity.location.Add(randomPoint)
+	for f.entity.world.GetTile(child.entity.location).isWalkable() == false {
+		randomPoint := &Point{
+			x: int(rand.Float32() * 11) - 5,
+			y: int(rand.Float32() * 11) - 5,
+		}
+		child.entity.location.Add(randomPoint)
 	}
 	f.entity.world.entities.PushBack(child)
 	return child
