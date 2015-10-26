@@ -3,6 +3,7 @@ package main
 import (
 	"container/list"
 	"math/rand"
+	"time"
 )
 
 type tileType int
@@ -32,6 +33,7 @@ type world struct {
 	cells         [][]*tile
 	player        *player
 	entities      *list.List
+	seed          *rand.Rand
 }
 
 func NewTile(kind tileType) *tile {
@@ -47,6 +49,7 @@ func NewTile(kind tileType) *tile {
 func NewWorld(width, height int) *world {
 	world := &world{dimensions: &Point{x: width, y: height}}
 	world.cells = make([][]*tile, world.dimensions.y)
+	world.seed = rand.New(rand.NewSource(time.Now().UnixNano()))
 	for row := range world.cells {
 		world.cells[row] = make([]*tile, world.dimensions.x)
 		for col := range world.cells[row] {

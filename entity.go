@@ -1,5 +1,9 @@
 package main
 
+import (
+	"math/rand"
+)
+
 type entity struct {
 	location *Point
 	glyph rune
@@ -7,6 +11,7 @@ type entity struct {
 	world *world
 	hp    int
 	maxHp int
+	seed  *rand.Rand
 }
 
 func (e entity) Hp() int {

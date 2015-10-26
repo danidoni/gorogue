@@ -2,20 +2,22 @@ package main
 
 import (
 	"math/rand"
+	"time"
 )
 
 func RandomWorld(world *world) {
-	RandomCave(world)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	RandomCave(world, r)
 
 	for i := 0; i < 8; i++ {
 		SmoothCave(world)
 	}
 }
 
-func RandomCave(world *world) {
+func RandomCave(world *world, r *rand.Rand) {
 	for row := range world.cells {
 		for col := range world.cells[row] {
-			if rand.Float32() < 0.5 {
+			if r.Float32() < 0.5 {
 				world.cells[row][col] = NewTile(floor)
 			} else {
 				world.cells[row][col] = NewTile(wall)

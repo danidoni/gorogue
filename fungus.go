@@ -2,6 +2,7 @@ package main
 
 import (
 	"math/rand"
+	"time"
 )
 
 type fungus struct {
@@ -19,6 +20,7 @@ func newFungus(world *world) *fungus {
 			world: world,
 			hp: 20,
 			maxHp: 20,
+			seed: rand.New(rand.NewSource(time.Now().UnixNano())),
 		},
 		0}
 }
