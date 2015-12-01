@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/nsf/termbox-go"
+	"log"
 )
 
 type direction int
@@ -17,9 +18,10 @@ type game struct {
 	viewport *viewport
 	screens  Stack
 	world    *world
+	logger   *log.Logger
 }
 
-func NewGame() *game {
+func NewGame(logger *log.Logger) *game {
 	screens := Stack{}
 	screens.Push(welcomeScreen{})
 	width, height := termbox.Size()
@@ -29,7 +31,7 @@ func NewGame() *game {
 	world.player = player
 	var entity autonomous = newFungus(world)
 	world.entities.add(entity)
-	game := &game{viewport, screens, world}
+	game := &game{viewport, screens, world, logger}
 	return game
 }
 
