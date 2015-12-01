@@ -41,6 +41,11 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 
 	// Dump stats at upper-right corner
 	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", player.Hp(), player.MaxHp()), 0, 0)
+
+	// Show notification messages
+	world.notifications.each(func(i int, message string) {
+		s.Write(0, viewport.height - i - 1, message, 0, 0)
+	})
 }
 
 func (s playScreen) Input(game *game, event termbox.Event) []Drawable {

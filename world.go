@@ -34,6 +34,7 @@ type world struct {
 	player        *player
 	entities      *list.List
 	seed          *rand.Rand
+	notifications *notificationCenter
 }
 
 func NewTile(kind tileType) *tile {
@@ -57,6 +58,7 @@ func NewWorld(width, height int) *world {
 		}
 	}
 	RandomWorld(world)
+	world.notifications = NewNotificationCenter()
 	return world
 }
 

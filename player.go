@@ -23,6 +23,7 @@ func (p *player) move(offset *Point) {
 	entity := p.world.entityAt(newLocation.x, newLocation.y)
 	if entity != nil {
 		p.world.removeEntity(entity)
+		p.world.notifications.notify("You have slain the creep!")
 	} else if tile.isWalkable() {
 		p.location.x = newLocation.x
 		p.location.y = newLocation.y
