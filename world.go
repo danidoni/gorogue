@@ -1,7 +1,6 @@
 package main
 
 import (
-	"container/list"
 	"math/rand"
 	"time"
 )
@@ -32,7 +31,7 @@ type world struct {
 	dimensions    *Point
 	cells         [][]*tile
 	player        *player
-	entities      *list.List
+	entities      []autonomous
 	seed          *rand.Rand
 	notifications *notificationCenter
 }
@@ -94,8 +93,8 @@ func (w *world) dig(point *Point) {
 }
 
 func (w *world) entitiesInside(point *Point, width, height int, callback func(entity autonomous)) {
-	for e := w.entities.Front(); e != nil; e = e.Next() {
-		entity := e.Value.(autonomous)
+	for i := range w.entities {
+		entity := w.entities[i]
 		entityLocation := entity.Position()
 		if entityLocation.x >= point.x &&
 			entityLocation.x <= point.x+width &&
@@ -125,8 +124,8 @@ func (w *world) atWalkableTile() *Point {
  * FIXME: Can be improved by previously indexing entities
  */
 func (w *world) entityAt(x, y int) autonomous {
-	for e := w.entities.Front(); e != nil; e = e.Next() {
-		entity := e.Value.(autonomous)
+	for i := range w.entities {
+		entity := w.entities[i]
 		position := entity.Position()
 		if position.x == x && position.y == y {
 			return entity
@@ -135,10 +134,21 @@ func (w *world) entityAt(x, y int) autonomous {
 	return nil
 }
 
+/* TODO: Try to find a way to remove the entity without leaving a hole in the
+ * array behind.
+ */
 func (w *world) removeEntity(entity autonomous) {
-	for e := w.entities.Front(); e != nil; e = e.Next() {
-		if entity == e.Value.(autonomous) {
-			w.entities.Remove(e)
+	position := w.findEntityPosition(entity)
+	w.entities = append(w.entities[:position], w.entities[position+1:]...)
+}
+
+/* Find the entity position inside the entities slice
+ */
+func (w *world) findEntityPosition(entity autonomous) int {
+	for i := range w.entities {
+		if entity == w.entities[i] {
+			return i;
 		}
 	}
+	return -1
 }

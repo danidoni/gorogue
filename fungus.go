@@ -57,6 +57,6 @@ func (f *fungus) spread() *fungus {
 		}
 		child.entity.location.Add(randomPoint)
 	}
-	f.entity.world.entities.PushBack(child)
+	f.entity.world.entities = append(f.entity.world.entities, autonomous(child))
 	return child
 }
