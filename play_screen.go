@@ -75,9 +75,9 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 		SmoothCave(world)
 	}
  	viewport.center(player.location.x, player.location.y)
-	for i := range world.entities {
-		e := world.entities[i]
+
+	world.entities.each(func(e autonomous) {
 		e.update()
-	}
+	})
 	return []Drawable{playScreen{}}
 }
