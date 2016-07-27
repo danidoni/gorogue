@@ -6,14 +6,14 @@ type player struct {
 
 func newPlayer(world *world) *player {
 	point := world.atWalkableTile()
+	stats := &Stats{hp: 100, maxHp: 100}
 	return &player{
 		entity{
 			location: point,
 			glyph: '@',
 			color: 0,
 			world: world,
-			hp: 100,
-			maxHp: 100,
+			stats: stats,
 		}}
 }
 

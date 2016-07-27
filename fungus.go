@@ -12,14 +12,14 @@ type fungus struct {
 
 func newFungus(world *world) *fungus {
 	point := world.atWalkableTile()
+	stats := &Stats{hp: 20, maxHp: 20}
 	return &fungus{
 		entity{
 			location: point,
 			glyph: 'f',
 			color: 0x4b,
 			world: world,
-			hp: 20,
-			maxHp: 20,
+			stats: stats,
 			seed: rand.New(rand.NewSource(time.Now().UnixNano())),
 		},
 		0}
@@ -59,4 +59,8 @@ func (f *fungus) spread() *fungus {
 	}
 	f.entity.world.entities.add(child)
 	return child
+}
+
+func (f *fungus) Stats() *Stats {
+	return f.stats
 }

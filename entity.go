@@ -9,25 +9,8 @@ type entity struct {
 	glyph rune
 	color int
 	world *world
-	hp    int
-	maxHp int
+	stats *Stats
 	seed  *rand.Rand
-}
-
-func (e entity) Hp() int {
-	return e.hp
-}
-
-func (e *entity) SetHp(amount int) {
-	e.hp = amount
-}
-
-func (e entity) MaxHp() int {
-	return e.maxHp
-}
-
-func (e *entity) SetMaxHp(value int) {
-	e.maxHp = value
 }
 
 func (e *entity) Avatar() (rune, int) {
@@ -42,10 +25,13 @@ func (e *entity) update() {
 	// Noop
 }
 
+func (e *entity) Stats() *Stats {
+	return e.stats
+}
+
 type autonomous interface {
 	Position() *Point
 	Avatar() (rune, int)
 	update()
-	Hp() int
-	SetHp(value int)
+	Stats() *Stats
 }

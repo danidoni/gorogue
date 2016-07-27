@@ -40,7 +40,8 @@ func (s playScreen) Draw(world *world, viewport *viewport) {
 		0)
 
 	// Dump stats at upper-right corner
-	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", player.Hp(), player.MaxHp()), 0, 0)
+	stats := player.Stats()
+	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", stats.Hp(), stats.MaxHp()), 0, 0)
 
 	// Show notification messages
 	world.notifications.each(func(i int, message string) {
