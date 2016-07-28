@@ -25,6 +25,6 @@ type ScreenWriter interface {
 
 type Drawable interface {
 	ScreenWriter
-	Draw(world *world, viewport *viewport)
+	Draw(game *game)
 	Input(game *game, event termbox.Event) []Drawable
 }

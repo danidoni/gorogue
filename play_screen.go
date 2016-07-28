@@ -9,7 +9,10 @@ type playScreen struct {
 	screen
 }
 
-func (s playScreen) Draw(world *world, viewport *viewport) {
+func (s playScreen) Draw(game *game) {
+	world := game.world
+	viewport := game.viewport
+
 	// Draws all viewport elements
 	viewport.iterate(func(x, y int, tile *tile) {
 		termbox.SetCell(x, y,

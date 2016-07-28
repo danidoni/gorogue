@@ -8,7 +8,7 @@ type welcomeScreen struct {
 	screen
 }
 
-func (s welcomeScreen) Draw(world *world, viewport *viewport) {
+func (s welcomeScreen) Draw(game *game) {
 	s.Write(0, 0, "Welcome to gorogue v0.0!", 0, 0)
 	s.Write(0, 1, "Press space to go to the play screen.", 0, 0)
 	s.Write(0, 2, "Press i to launch a dialog.", 0, 0)

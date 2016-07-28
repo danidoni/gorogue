@@ -55,7 +55,7 @@ func (g *game) Run() {
 	screen := g.PopLastScreen()
 	for screen != nil {
 		termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
-		screen.(Drawable).Draw(g.world, g.viewport)
+		screen.(Drawable).Draw(g)
 		termbox.Flush()
 		event := termbox.PollEvent()
 		g.Update(screen, event)

@@ -9,7 +9,7 @@ type dialogScreen struct {
 	screen
 }
 
-func (s dialogScreen) Draw(world *world, viewport *viewport) {
+func (s dialogScreen) Draw(game *game) {
 	s.Write(0, 0, "This is a palette dialog", 0, 0)
 	s.Write(0, 1, "Press q to go back.", 0, 0)
 	var color termbox.Attribute = 0x00
