@@ -59,6 +59,11 @@ func NewWorld(width, height int) *world {
 	RandomWorld(world)
 	world.notifications = NewNotificationCenter()
 	world.entities = NewEntities()
+
+	world.player = newPlayer(world)
+
+	world.entities.add(newFungus(world))
+
 	return world
 }
 

@@ -24,14 +24,8 @@ type game struct {
 func NewGame(logger *log.Logger) *game {
 	world := NewWorld(250, 100)
 
-	player := newPlayer(world)
-	world.player = player
-
-	var entity autonomous = newFungus(world)
-	world.entities.add(entity)
-
 	width, height := termbox.Size()
-	viewport := centeredViewport(player.location, width, height, world)
+	viewport := centeredViewport(world.player.location, width, height, world)
 
 	screens := Stack{}
 	screens.Push(welcomeScreen{})
