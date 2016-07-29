@@ -22,16 +22,25 @@ type game struct {
 }
 
 func NewGame(logger *log.Logger) *game {
-	screens := Stack{}
-	screens.Push(welcomeScreen{})
-	width, height := termbox.Size()
 	world := NewWorld(250, 100)
+
 	player := newPlayer(world)
-	viewport := centeredViewport(player.location, width, height, world)
 	world.player = player
+
 	var entity autonomous = newFungus(world)
 	world.entities.add(entity)
-	game := &game{viewport, screens, world, logger}
+
+	width, height := termbox.Size()
+	viewport := centeredViewport(player.location, width, height, world)
+
+	screens := Stack{}
+	screens.Push(welcomeScreen{})
+	game := &game{
+		viewport: viewport,
+		screens: screens,
+		world: world,
+		logger: logger,
+	}
 	return game
 }
 
@@ -44,7 +53,8 @@ func (g *game) PopLastScreen() Drawable {
 	}
 }
 
-func (g *game) Update(screen Drawable, event termbox.Event) {
+func (g *game) Update(screen Drawable) {
+	event := termbox.PollEvent()
 	nextScreens := screen.Input(g, event)
 	if len(nextScreens) > 0 {
 		for _, s := range nextScreens {
@@ -63,8 +73,7 @@ func (g *game) Run() {
 	screen := g.PopLastScreen()
 	for screen != nil {
 		g.Render(screen)
-		event := termbox.PollEvent()
-		g.Update(screen, event)
+		g.Update(screen)
 		screen = g.PopLastScreen()
 	}
 }
