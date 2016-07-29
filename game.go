@@ -53,12 +53,16 @@ func (g *game) Update(screen Drawable, event termbox.Event) {
 	}
 }
 
+func (g *game) Render(screen Drawable) {
+	termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
+	screen.(Drawable).Draw(g)
+	termbox.Flush()
+}
+
 func (g *game) Run() {
 	screen := g.PopLastScreen()
 	for screen != nil {
-		termbox.Clear(termbox.ColorWhite, termbox.ColorBlack)
-		screen.(Drawable).Draw(g)
-		termbox.Flush()
+		g.Render(screen)
 		event := termbox.PollEvent()
 		g.Update(screen, event)
 		screen = g.PopLastScreen()
