@@ -10,6 +10,15 @@ type playScreen struct {
 }
 
 func (s playScreen) Setup(game *game) {
+	if game.world == nil {
+		game.world = NewWorld(250, 100)
+		game.viewport = NewViewport(
+			&Point{0, 0},
+			game.width,
+			game.height,
+			game.world)
+	}
+
 	viewport := game.viewport
 	location := game.world.player.location
 	viewport.center(location.x, location.y)
@@ -64,7 +73,7 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	player := world.player
 	switch {
 	case event.Ch == 'q':
-		return []Drawable{welcomeScreen{}}
+		return []Drawable{GameoverScreen{}}
 	case event.Ch == 'h':
 		player.move(&Point{x: -1, y: 0})
 	case event.Ch == 'y':

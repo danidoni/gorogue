@@ -17,22 +17,21 @@ const (
 type game struct {
 	viewport *viewport
 	screens  Stack
+	width    int
+	height   int
 	world    *world
 	logger   *log.Logger
 }
 
 func NewGame(logger *log.Logger) *game {
-	world := NewWorld(250, 100)
-
 	width, height := termbox.Size()
-	viewport := NewViewport(&Point{0, 0}, width, height, world)
 
 	screens := Stack{}
 	screens.Push(welcomeScreen{})
 	game := &game{
-		viewport: viewport,
 		screens: screens,
-		world: world,
+		width: width,
+		height: height,
 		logger: logger,
 	}
 	return game
