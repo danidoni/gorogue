@@ -25,6 +25,7 @@ type ScreenWriter interface {
 
 type Drawable interface {
 	ScreenWriter
+	Setup(game *game)
 	Draw(game *game)
 	Input(game *game, event termbox.Event) []Drawable
 }

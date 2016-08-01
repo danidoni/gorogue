@@ -9,6 +9,10 @@ type playScreen struct {
 	screen
 }
 
+func (s playScreen) Setup(game *game) {
+
+}
+
 func (s playScreen) Draw(game *game) {
 	world := game.world
 	viewport := game.viewport
