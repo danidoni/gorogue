@@ -6,7 +6,7 @@ type viewport struct {
 	world         *world
 }
 
-func centeredViewport(center *Point, width, height int, world *world) *viewport {
+func NewViewport(center *Point, width, height int, world *world) *viewport {
 	v := &viewport{width: width, height: height, world: world}
 	v.center(center.x, center.y)
 	return v

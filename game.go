@@ -25,7 +25,7 @@ func NewGame(logger *log.Logger) *game {
 	world := NewWorld(250, 100)
 
 	width, height := termbox.Size()
-	viewport := centeredViewport(world.player.location, width, height, world)
+	viewport := NewViewport(&Point{0, 0}, width, height, world)
 
 	screens := Stack{}
 	screens.Push(welcomeScreen{})
@@ -66,6 +66,7 @@ func (g *game) Render(screen Drawable) {
 func (g *game) Run() {
 	screen := g.PopLastScreen()
 	for screen != nil {
+		screen.(Drawable).Setup(g)
 		g.Render(screen)
 		g.Update(screen)
 		screen = g.PopLastScreen()

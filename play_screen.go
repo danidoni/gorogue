@@ -10,7 +10,9 @@ type playScreen struct {
 }
 
 func (s playScreen) Setup(game *game) {
-
+	viewport := game.viewport
+	location := game.world.player.location
+	viewport.center(location.x, location.y)
 }
 
 func (s playScreen) Draw(game *game) {
