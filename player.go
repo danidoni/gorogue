@@ -22,12 +22,16 @@ func (p *player) move(offset *Point) {
 	tile := p.world.GetTile(newLocation)
 	entity := p.world.entityAt(newLocation.x, newLocation.y)
 	if entity != nil {
-		p.world.entities.remove(entity)
-		p.world.notifications.notify("You have slain the creep!")
+		p.OnKill(entity)
 	} else if tile.isWalkable() {
 		p.location.x = newLocation.x
 		p.location.y = newLocation.y
 	} else if tile.isDiggable() {
 		p.world.dig(newLocation)
 	}
+}
+
+func (p *player) OnKill(entity autonomous) {
+	p.world.entities.remove(entity)
+	p.world.notifications.notify("You have slain the creep!")
 }
