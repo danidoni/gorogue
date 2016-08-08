@@ -15,7 +15,7 @@ func (n *notificationCenter) notify(message string) {
 }
 
 func (n *notificationCenter) each(callback func(int, string)) {
-	for i := range n.messages {
+	for i := len(n.messages)-1; i>=0; i-- {
 		callback(i, n.messages[i])
 	}
 	n.messages = make([]string, 0)

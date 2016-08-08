@@ -62,12 +62,15 @@ func (s playScreen) Draw(game *game) {
 	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", stats.Hp(), stats.MaxHp()), 0, 0)
 
 	// Show notification messages
+	j := 0
+	height := viewport.height - 1
 	world.notifications.each(func(i int, message string) {
-		s.Write(0, viewport.height - i - 1, message, 0, 0)
-	})
-}
+		s.Write(0, height - j, message, 0, 0)
+		j++
 
 func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
+	})
+}
 	viewport := game.viewport
 	world := game.world
 	player := world.player
