@@ -1,8 +1,10 @@
 package main
 
 type Stats struct {
-	hp    int
-	maxHp int
+	hp      int
+	maxHp   int
+	attack  int
+	defense int
 }
 
 func (s Stats) Hp() int {
@@ -19,4 +21,16 @@ func (s Stats) MaxHp() int {
 
 func (s *Stats) SetMaxHp(value int) {
 	s.maxHp = value
+}
+
+func (s *Stats) Attack() int {
+	return s.attack
+}
+
+func (s *Stats) Defense() int {
+	return s.defense
+}
+
+func (s *Stats) ApplyDamage(amount int) {
+	s.hp -= amount
 }

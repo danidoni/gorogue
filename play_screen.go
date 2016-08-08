@@ -60,6 +60,8 @@ func (s playScreen) Draw(game *game) {
 	// Dump stats at upper-right corner
 	stats := player.Stats()
 	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", stats.Hp(), stats.MaxHp()), 0, 0)
+	s.Write(viewport.width - 15, 1, fmt.Sprintf("AT: %d", stats.Attack()), 0, 0)
+	s.Write(viewport.width - 15, 2, fmt.Sprintf("DF: %d", stats.Defense()), 0, 0)
 
 	// Show notification messages
 	j := 0
@@ -67,10 +69,10 @@ func (s playScreen) Draw(game *game) {
 	world.notifications.each(func(i int, message string) {
 		s.Write(0, height - j, message, 0, 0)
 		j++
-
-func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	})
 }
+
+func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	viewport := game.viewport
 	world := game.world
 	player := world.player

@@ -11,6 +11,7 @@ type entity struct {
 	world *world
 	stats *Stats
 	seed  *rand.Rand
+	name string
 }
 
 func (e *entity) Avatar() (rune, int) {
@@ -32,6 +33,7 @@ func (e *entity) Stats() *Stats {
 type autonomous interface {
 	Position() *Point
 	Avatar() (rune, int)
+	Name() string
 	update()
 	Stats() *Stats
 }
