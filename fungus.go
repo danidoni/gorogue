@@ -16,12 +16,12 @@ func newFungus(world *world) *fungus {
 	return &fungus{
 		entity{
 			location: point,
-			glyph: 'f',
-			color: 0x4b,
-			world: world,
-			stats: stats,
-			name: "Fungus",
-			seed: rand.New(rand.NewSource(time.Now().UnixNano())),
+			glyph:    'f',
+			color:    0x4b,
+			world:    world,
+			stats:    stats,
+			name:     "Fungus",
+			seed:     rand.New(rand.NewSource(time.Now().UnixNano())),
 		},
 		0}
 }
@@ -47,14 +47,14 @@ func (f *fungus) update() {
 func (f *fungus) spread() *fungus {
 	child := newFungus(f.entity.world)
 	randomPoint := &Point{
-		x: int(rand.Float32() * 11) - 5,
-		y: int(rand.Float32() * 11) - 5,
+		x: int(rand.Float32()*11) - 5,
+		y: int(rand.Float32()*11) - 5,
 	}
 	child.entity.location.Add(randomPoint)
 	for f.entity.world.GetTile(child.entity.location).isWalkable() == false {
 		randomPoint := &Point{
-			x: int(rand.Float32() * 11) - 5,
-			y: int(rand.Float32() * 11) - 5,
+			x: int(rand.Float32()*11) - 5,
+			y: int(rand.Float32()*11) - 5,
 		}
 		child.entity.location.Add(randomPoint)
 	}
