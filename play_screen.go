@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/nsf/termbox-go"
 	"fmt"
+	"github.com/nsf/termbox-go"
 )
 
 type playScreen struct {
@@ -49,7 +49,6 @@ func (s playScreen) Draw(game *game) {
 	})
 
 	// Draws the player
-	player := world.player
 	playerLocation := viewport.worldToViewport(player.location)
 	termbox.SetCell(playerLocation.x,
 		playerLocation.y,
@@ -59,15 +58,15 @@ func (s playScreen) Draw(game *game) {
 
 	// Dump stats at upper-right corner
 	stats := player.Stats()
-	s.Write(viewport.width - 15, 0, fmt.Sprintf("HP: %d/%d", stats.Hp(), stats.MaxHp()), 0, 0)
-	s.Write(viewport.width - 15, 1, fmt.Sprintf("AT: %d", stats.Attack()), 0, 0)
-	s.Write(viewport.width - 15, 2, fmt.Sprintf("DF: %d", stats.Defense()), 0, 0)
+	s.Write(viewport.width-15, 0, fmt.Sprintf("HP: %d/%d", stats.Hp(), stats.MaxHp()), 0, 0)
+	s.Write(viewport.width-15, 1, fmt.Sprintf("AT: %d", stats.Attack()), 0, 0)
+	s.Write(viewport.width-15, 2, fmt.Sprintf("DF: %d", stats.Defense()), 0, 0)
 
 	// Show notification messages
 	j := 0
 	height := viewport.height - 1
 	world.notifications.each(func(i int, message string) {
-		s.Write(0, height - j, message, 0, 0)
+		s.Write(0, height-j, message, 0, 0)
 		j++
 	})
 }
@@ -98,7 +97,7 @@ func (s playScreen) Input(game *game, event termbox.Event) []Drawable {
 	case event.Ch == 's':
 		SmoothCave(world)
 	}
- 	viewport.center(player.location.x, player.location.y)
+	viewport.center(player.location.x, player.location.y)
 
 	world.entities.each(func(e autonomous) {
 		e.update()
